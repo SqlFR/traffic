@@ -1,9 +1,8 @@
 import pygame
 from pygame import locals as const
 
-from road_segment import draw_dashed_line, RoadSegment
-
-COLOR_WHITE = (255, 255, 255)
+from road_segment import RoadSegment
+from colors import Colors
 
 
 def main():
@@ -11,21 +10,32 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode((1280, 720))
-    # line_up = pygame.draw.line(screen, (255, 255, 255), (0, 100), (1280, 100), 5)
+
+    rect_lights = pygame.Rect(40, 40, 30, 12)
 
     road_segment1 = RoadSegment((0, 100))
     road_segment2 = RoadSegment((80, 100))
-    road_segment3 = RoadSegment((450, 230), False)
+    road_segment3 = RoadSegment((160, 100))
+    road_segment4 = RoadSegment((240, 20), False)
+    road_segment5 = RoadSegment((280, 100))
+    road_segment6 = RoadSegment((240, 140), False)
+    road_segment7 = RoadSegment((320, 100))
 
     run = True
 
     while run:
 
-        screen.fill('black')
+        screen.fill((59, 59, 59))
 
-        road_segment1.draw(screen)
-        road_segment2.draw(screen)
-        road_segment3.draw(screen)
+        pygame.draw.rect(screen, Colors.BLACK.value, rect_lights, 2)
+
+        road_segment1.draw_lines(screen)
+        road_segment2.draw_lines(screen)
+        road_segment3.draw_lines(screen)
+        road_segment4.draw_lines(screen)
+        road_segment5.draw_lines(screen)
+        road_segment6.draw_lines(screen)
+        road_segment7.draw_lines(screen)
 
         for event in pygame.event.get():
             if event.type == const.KEYDOWN and event.key == const.K_ESCAPE:
