@@ -3,8 +3,7 @@ from colors import Colors
 
 
 # Fonction pour dessiner une ligne pointillée
-def draw_dashed_line(surface: pygame.Surface, start_pos: tuple, end_pos: tuple,
-                     width: int = 3, dash_length: int = 10):
+def draw_dashed_line(surface: pygame.Surface, start_pos: tuple, end_pos: tuple):
     # Calcule le vecteur directionnel entre le point de départ et d'arrivée
     x1, y1 = start_pos
     x2, y2 = end_pos
@@ -17,7 +16,7 @@ def draw_dashed_line(surface: pygame.Surface, start_pos: tuple, end_pos: tuple,
     dy /= length
 
     # Diviser la ligne en segments visibles et invisibles
-    dash_step = dash_length
+    dash_step = 10
     dashes = int(length // dash_step)
     for i in range(dashes):
         start_dash_x = x1 + dx * i * dash_step
@@ -26,7 +25,8 @@ def draw_dashed_line(surface: pygame.Surface, start_pos: tuple, end_pos: tuple,
         end_dash_y = y1 + dy * (i + 0.5) * dash_step
 
         # Dessine le segment visible
-        pygame.draw.line(surface, Colors.WHITE.value, (start_dash_x, start_dash_y), (end_dash_x, end_dash_y), width)
+        pygame.draw.line(surface, Colors.WHITE.value, (start_dash_x, start_dash_y),
+                         (end_dash_x, end_dash_y), 3)
 
 
 class RoadSegment:
@@ -68,10 +68,6 @@ class RoadSegment:
         draw_dashed_line(surface, *pos_dash_line)
         pygame.draw.line(surface, Colors.WHITE.value, *pos_bottom_line, width=3)
 
-
-# class Lights:
-#
-#     image = pygame.image.load()
 
 
 

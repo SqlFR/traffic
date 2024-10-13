@@ -21,21 +21,21 @@ def main():
     road_segment6 = RoadSegment((240, 140), False)
     road_segment7 = RoadSegment((320, 100))
 
+    screen.fill((59, 59, 59))
+
+    pygame.draw.rect(screen, Colors.BLACK.value, rect_lights, 2)
+
+    road_segment1.draw_lines(screen)
+    road_segment2.draw_lines(screen)
+    road_segment3.draw_lines(screen)
+    road_segment4.draw_lines(screen)
+    road_segment5.draw_lines(screen)
+    road_segment6.draw_lines(screen)
+    road_segment7.draw_lines(screen)
+
     run = True
 
     while run:
-
-        screen.fill((59, 59, 59))
-
-        pygame.draw.rect(screen, Colors.BLACK.value, rect_lights, 2)
-
-        road_segment1.draw_lines(screen)
-        road_segment2.draw_lines(screen)
-        road_segment3.draw_lines(screen)
-        road_segment4.draw_lines(screen)
-        road_segment5.draw_lines(screen)
-        road_segment6.draw_lines(screen)
-        road_segment7.draw_lines(screen)
 
         for event in pygame.event.get():
             if event.type == const.KEYDOWN and event.key == const.K_ESCAPE:
