@@ -1,5 +1,6 @@
 import pygame
 from colors import Colors
+from traffic_light import TrafficLight
 
 
 # Fonction pour dessiner une ligne pointillée
@@ -31,12 +32,16 @@ def draw_dashed_line(surface: pygame.Surface, start_pos: tuple, end_pos: tuple):
 
 class RoadSegment:
 
-    def __init__(self, start_pos: tuple, horizontal: bool = True, lights: bool = False):
+    def __init__(self, start_pos: tuple, horizontal: bool = True, has_traffic_lights: bool = False):
         self.start_pos = start_pos
         self.horizontal = horizontal
-        self.lights = lights
+        self.has_traffic_lights = has_traffic_lights
+        self.traffic_light = None
 
-    def draw_lines(self, surface):
+        if self.has_traffic_lights:
+            self.traffic_light = TrafficLight()
+
+    def draw(self, surface):
         x_start, y_start = self.start_pos
 
         # Définit la longueur par défaut du bloc de route à 80 pixels
@@ -63,10 +68,14 @@ class RoadSegment:
             pos_dash_line = (x_start + offset_dash, y_start), (x_end + offset_dash, y_end)
             pos_bottom_line = (x_start + offset_bottom, y_start), (x_end + offset_bottom, y_end)
 
+        if self.traffic_light:
+            self.traffic_light.draw(surface, (x_end - 5, y_end + 50))
+
         # Dessiner les lignes
         pygame.draw.line(surface, Colors.WHITE.value, *pos_top_line, width=3)
         draw_dashed_line(surface, *pos_dash_line)
         pygame.draw.line(surface, Colors.WHITE.value, *pos_bottom_line, width=3)
+
 
 
 

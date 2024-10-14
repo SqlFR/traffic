@@ -22,4 +22,4 @@ class TrafficLight:
             color = Colors.ORANGE.value
 
         # Dessine un cercle représentant le feu de signalisation
-        pygame.draw.circle(surface, color, position, 10)
+        pygame.draw.circle(surface, color, position, 5)
