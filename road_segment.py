@@ -14,70 +14,33 @@ class RoadSegment:
         self.start_pos = start_pos
         self.horizontal = horizontal
         self.has_traffic_lights = has_traffic_lights
-        self.traffic_light = None
+        self.traffic_light = TrafficLight() if has_traffic_lights else None
         self.length = LENGTH
         self.offset_dash = OFFSET_DASH
         self.offset_bottom = OFFSET_BOTTOM
+        self.x_start, self.y_start = self.start_pos
+        self.x_end = self.x_start + self.length if horizontal else self.x_start
+        self.y_end = self.y_start if horizontal else self.y_start + self.length
 
-        if self.has_traffic_lights:
-            self.traffic_light = TrafficLight()
-
-    def define_pos_top_line(self):
-        x_start, y_start = self.start_pos
-
-        if self.horizontal:
-            x_end, y_end = x_start + self.length, y_start
-            pos_top_line = (x_start, y_start), (x_end, y_end)
-        else:
-            x_end, y_end = x_start, y_start + self.length
-            pos_top_line = (x_start, y_start), (x_end, y_end)
-
-        return pos_top_line
-
-    def define_pos_dash_line(self):
-        x_start, y_start = self.start_pos
-
-        if self.horizontal:
-            x_end, y_end = x_start + self.length, y_start
-            pos_dash_line = (x_start, y_start + self.offset_dash), (x_end, y_end + self.offset_dash)
-        else:
-            x_end, y_end = x_start, y_start + self.length
-            pos_dash_line = (x_start + self.offset_dash, y_start), (x_end + self.offset_dash, y_end)
-
-        return pos_dash_line
-
-    def define_pos_lines(self):
-
-        x_start, y_start = self.start_pos
-
-        # Si la route est horizontale
-        if self.horizontal:
-            x_end, y_end = x_start + self.length, y_start
-
-            # Définir les positions pour les trois lignes
-            pos_bottom_line = (x_start, y_start + self.offset_bottom), (x_end, y_end + self.offset_bottom)
-        # Si la route est verticale
-        else:
-            x_end, y_end = x_start, y_start + self.length
-
-            # Définir les positions pour les trois lignes
-            pos_bottom_line = (x_start + self.offset_bottom, y_start), (x_end + self.offset_bottom, y_end)
-
-        return pos_bottom_line, x_end, y_end
+    def define_position_lines(self, offset):
+        return ((self.x_start, self.y_start + offset), (self.x_end, self.y_end + offset)) if self.horizontal \
+            else ((self.x_start + offset, self.y_start), (self.x_end + offset, self.y_end))
 
     def draw(self, surface):
 
-        pos_bottom_line, x_end, y_end = self.define_pos_lines()
-        pos_top_line = self.define_pos_top_line()
-        pos_dash_line = self.define_pos_dash_line()
+        lines = [
+            self.define_position_lines(0),  # Top
+            self.define_position_lines(self.offset_dash),  # Dash
+            self.define_position_lines(self.offset_bottom)  # Bottom
+        ]
 
         if self.traffic_light:
-            self.traffic_light.draw(surface, (x_end - 5, y_end + 50))
+            self.traffic_light.draw(surface, (self.x_end - 5, self.y_end + 50))
 
         # Dessiner les lignes
-        pygame.draw.line(surface, Colors.WHITE.value, *pos_top_line, width=3)
-        draw_dashed_line(surface, *pos_dash_line)
-        pygame.draw.line(surface, Colors.WHITE.value, *pos_bottom_line, width=3)
+        pygame.draw.line(surface, Colors.WHITE.value, *lines[0], width=3)
+        draw_dashed_line(surface, *lines[1])
+        pygame.draw.line(surface, Colors.WHITE.value, *lines[2], width=3)
 
 
 # Fonction pour dessiner une ligne pointillée
