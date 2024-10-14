@@ -22,6 +22,30 @@ class RoadSegment:
         if self.has_traffic_lights:
             self.traffic_light = TrafficLight()
 
+    def define_pos_top_line(self):
+        x_start, y_start = self.start_pos
+
+        if self.horizontal:
+            x_end, y_end = x_start + self.length, y_start
+            pos_top_line = (x_start, y_start), (x_end, y_end)
+        else:
+            x_end, y_end = x_start, y_start + self.length
+            pos_top_line = (x_start, y_start), (x_end, y_end)
+
+        return pos_top_line
+
+    def define_pos_dash_line(self):
+        x_start, y_start = self.start_pos
+
+        if self.horizontal:
+            x_end, y_end = x_start + self.length, y_start
+            pos_dash_line = (x_start, y_start + self.offset_dash), (x_end, y_end + self.offset_dash)
+        else:
+            x_end, y_end = x_start, y_start + self.length
+            pos_dash_line = (x_start + self.offset_dash, y_start), (x_end + self.offset_dash, y_end)
+
+        return pos_dash_line
+
     def define_pos_lines(self):
 
         x_start, y_start = self.start_pos
@@ -31,23 +55,21 @@ class RoadSegment:
             x_end, y_end = x_start + self.length, y_start
 
             # Définir les positions pour les trois lignes
-            pos_top_line = (x_start, y_start), (x_end, y_end)
-            pos_dash_line = (x_start, y_start + self.offset_dash), (x_end, y_end + self.offset_dash)
             pos_bottom_line = (x_start, y_start + self.offset_bottom), (x_end, y_end + self.offset_bottom)
         # Si la route est verticale
         else:
             x_end, y_end = x_start, y_start + self.length
 
             # Définir les positions pour les trois lignes
-            pos_top_line = (x_start, y_start), (x_end, y_end)
-            pos_dash_line = (x_start + self.offset_dash, y_start), (x_end + self.offset_dash, y_end)
             pos_bottom_line = (x_start + self.offset_bottom, y_start), (x_end + self.offset_bottom, y_end)
 
-        return pos_top_line, pos_dash_line, pos_bottom_line, x_end, y_end
+        return pos_bottom_line, x_end, y_end
 
     def draw(self, surface):
 
-        pos_top_line, pos_dash_line, pos_bottom_line, x_end, y_end = self.define_pos_lines()
+        pos_bottom_line, x_end, y_end = self.define_pos_lines()
+        pos_top_line = self.define_pos_top_line()
+        pos_dash_line = self.define_pos_dash_line()
 
         if self.traffic_light:
             self.traffic_light.draw(surface, (x_end - 5, y_end + 50))
