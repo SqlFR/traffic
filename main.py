@@ -15,10 +15,10 @@ def main():
 
     road_segment1 = RoadSegment((0, 100))
     road_segment2 = RoadSegment((80, 100))
-    road_segment3 = RoadSegment((160, 100), has_traffic_lights=True)
-    road_segment4 = RoadSegment((240, 20), False)
-    road_segment5 = RoadSegment((280, 100))
-    road_segment6 = RoadSegment((240, 140), False)
+    road_segment3 = RoadSegment((160, 100), localisation_traffic_lights='Right')
+    road_segment4 = RoadSegment((240, 20), False, localisation_traffic_lights='Bottom')
+    road_segment5 = RoadSegment((280, 100), localisation_traffic_lights='Left')
+    road_segment6 = RoadSegment((240, 140), False, localisation_traffic_lights='Top')
     road_segment7 = RoadSegment((320, 100))
 
     screen.fill((59, 59, 59))

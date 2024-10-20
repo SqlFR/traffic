@@ -1,20 +1,19 @@
 import pygame
 from colors import Colors
-from traffic_light import TrafficLight
+from traffic_lights import TrafficLights
 
 
-LENGTH = 80  # Définit la longeur de la route
-OFFSET_DASH = 20  # Crée un décalage pour la ligne pointillée
-OFFSET_BOTTOM = 40  # Crée un décalage pour la ligne du bas
+LENGTH = 80  # Définit la longeur de la section route
+OFFSET_DASH = 20  # Crée un décalage par apport à la ligne top(horizontal)/gauche(vertical) pour la ligne pointillée
+OFFSET_BOTTOM = 40  # Crée un décalage par apport à la ligne top(horizontal)/gauche(vertical) pour la ligne opposée
 
 
 class RoadSegment:
 
-    def __init__(self, start_pos: tuple, horizontal: bool = True, has_traffic_lights: bool = False):
+    def __init__(self, start_pos: tuple, horizontal: bool = True, localisation_traffic_lights: str = None):
         self.start_pos = start_pos
-        self.horizontal = horizontal
-        self.has_traffic_lights = has_traffic_lights
-        self.traffic_light = TrafficLight() if has_traffic_lights else None
+        self.horizontal = horizontal  # Sens de la route
+        self.traffic_lights = TrafficLights(start_pos, localisation_traffic_lights) if localisation_traffic_lights else None
         self.length = LENGTH
         self.offset_dash = OFFSET_DASH
         self.offset_bottom = OFFSET_BOTTOM
@@ -22,25 +21,26 @@ class RoadSegment:
         self.x_end = self.x_start + self.length if horizontal else self.x_start
         self.y_end = self.y_start if horizontal else self.y_start + self.length
 
+    # Definie le positionnement des lignes en ajoutant un décalage à la ligne pointillée et opposée
     def define_position_lines(self, offset):
         return ((self.x_start, self.y_start + offset), (self.x_end, self.y_end + offset)) if self.horizontal \
             else ((self.x_start + offset, self.y_start), (self.x_end + offset, self.y_end))
 
+    # Dessine la section de route avec le feu de traffic si nécessaire
     def draw(self, surface):
 
         lines = [
             self.define_position_lines(0),  # Top
-            self.define_position_lines(self.offset_dash),  # Dash
-            self.define_position_lines(self.offset_bottom)  # Bottom
+            self.define_position_lines(self.offset_dash),  # Pointillé
+            self.define_position_lines(self.offset_bottom)  # Opposé
         ]
 
-        if self.traffic_light:
-            self.traffic_light.draw(surface, (self.x_end - 5, self.y_end + 50))
-
-        # Dessiner les lignes
         pygame.draw.line(surface, Colors.WHITE.value, *lines[0], width=3)
         draw_dashed_line(surface, *lines[1])
         pygame.draw.line(surface, Colors.WHITE.value, *lines[2], width=3)
+
+        if self.traffic_lights:
+            self.traffic_lights.draw(surface)
 
 
 # Fonction pour dessiner une ligne pointillée
