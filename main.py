@@ -11,6 +11,7 @@ def main():
 
     screen = pygame.display.set_mode((1280, 720))
 
+
     # rect_lights = pygame.Rect(40, 40, 30, 12)
 
     road_segment1 = RoadSegment((0, 100))
