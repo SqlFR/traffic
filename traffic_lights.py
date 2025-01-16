@@ -3,53 +3,40 @@ from colors import Colors
 
 
 class TrafficLights:
-    def __init__(self, position_road, localisation_traffic_lights, state):
+    def __init__(self, position, state='red'):
         self.state = state
-        self.position_road = position_road
-        self.localisation = localisation_traffic_lights  # Renseigne vers où se trouve le carrefour par apport au segment de route
+        self.position = position
 
-        self.red_light = pygame.image.load('images/red_light.png').convert_alpha()
-        self.orange_light = pygame.image.load('images/orange_light.png').convert_alpha()
-        self.green_light = pygame.image.load('images/green_light.png').convert_alpha()
-
-        x, y = self.position_road
-
-        if self.localisation == 'Right':
-            self.position_traffic_lights = x + 125, y + 45
-            self.green_light = pygame.transform.rotate(self.green_light, -90)
-            self.red_light = pygame.transform.rotate(self.red_light, -90)
-        elif self.localisation == 'Bottom':
-            self.position_traffic_lights = x - 20, y + 125
-            self.green_light = pygame.transform.rotate(self.green_light, 180)
-            self.red_light = pygame.transform.rotate(self.red_light, 180)
-        elif self.localisation == 'Left':
-            self.position_traffic_lights = x - 80, y - 18
-            self.green_light = pygame.transform.rotate(self.green_light, 90)
-            self.red_light = pygame.transform.rotate(self.red_light, 90)
-        elif self.localisation == 'Top':
-            self.position_traffic_lights = x + 45, y - 80
+        self.image_red_light = pygame.image.load('images/red_light.png').convert_alpha()
+        self.image_orange_light = pygame.image.load('images/orange_light.png').convert_alpha()
+        self.image_green_light = pygame.image.load('images/green_light.png').convert_alpha()
 
     def change_state(self, new_state):
         self.state = new_state
+
+    def red_light(self):
+        self.change_state('red')
+
+    def orange_light(self):
+        self.change_state('orange')
+
+    def green_light(self):
+        self.change_state('green')
 
     def get_state(self):
         return self.state
 
     def draw(self, surface):
-
         if self.state == 'red':
-            surface.blit(scale_image(self.red_light, 0.05), self.position_traffic_lights)
+            surface.blit(scale_image(self.image_red_light, 0.05), self.position)
         elif self.state == 'orange':
-            surface.blit(scale_image(self.orange_light, 0.05), self.position_traffic_lights)
+            surface.blit(scale_image(self.image_orange_light, 0.05), self.position)
         elif self.state == 'green':
-            surface.blit(scale_image(self.green_light, 0.05), self.position_traffic_lights)
+            surface.blit(scale_image(self.image_green_light, 0.05), self.position)
 
 
-        # Dessine un cercle représentant le feu de signalisation
-        # pygame.draw.circle(surface, color, self.position_traffic_lights, 5)
-
-
-def scale_image(image, scale):
+# modifier la taille de l'image
+def scale_image(image, scale) -> pygame.Surface:
     width = image.get_width()
     height = image.get_height()
 

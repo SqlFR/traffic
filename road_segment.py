@@ -1,6 +1,5 @@
 import pygame
 from colors import Colors
-from traffic_lights import TrafficLights
 
 
 LENGTH = 80  # Définit la longeur de la section route
@@ -10,10 +9,9 @@ OFFSET_BOTTOM = 40  # Crée un décalage par apport à la ligne top(horizontal)/
 
 class RoadSegment:
 
-    def __init__(self, start_pos: tuple, horizontal: bool = True, localisation_traffic_lights: str = None):
+    def __init__(self, start_pos: tuple, horizontal: bool = True):
         self.start_pos = start_pos
         self.horizontal = horizontal  # Sens de la route
-        self.traffic_lights = TrafficLights(start_pos, localisation_traffic_lights) if localisation_traffic_lights else None
         self.length = LENGTH
         self.offset_dash = OFFSET_DASH
         self.offset_bottom = OFFSET_BOTTOM
@@ -38,9 +36,6 @@ class RoadSegment:
         pygame.draw.line(surface, Colors.WHITE.value, *lines[0], width=3)
         draw_dashed_line(surface, *lines[1])
         pygame.draw.line(surface, Colors.WHITE.value, *lines[2], width=3)
-
-        if self.traffic_lights:
-            self.traffic_lights.draw(surface)
 
 
 # Fonction pour dessiner une ligne pointillée
